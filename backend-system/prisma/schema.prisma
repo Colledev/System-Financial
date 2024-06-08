@@ -8,9 +8,32 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
+  id                String   @id @default(cuid())
+  nomeRazaoSocial   String
+  cnpj              String   @unique
+  endereco          String
+  bairro            String
+  cep               String
+  municipio         String
+  telefoneFax       String
+  uf                String
+  inscricaoEstadual String
+  email             String   @unique
+  password          String
+  createdAt         DateTime @default(now())
 }
+
+model Company {
+  id                String   @id @default(cuid())
+  nomeRazaoSocial   String
+  cnpj              String   @unique
+  endereco          String
+  bairro            String
+  cep               String
+  municipio         String
+  telefoneFax       String
+  uf                String
+  inscricaoEstadual String
+}
+
+
