@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Layout from "../layout/layout";
+import Budget from "../pages/Budget";
 
 const AppRoutes = () => {
     return (
@@ -10,6 +11,14 @@ const AppRoutes = () => {
                 element={
                     <Layout>
                         <Home />
+                    </Layout>
+                }
+            />
+            <Route
+                path="/Budget"
+                element={
+                    <Layout>
+                        <Budget />
                     </Layout>
                 }
             />
