@@ -1,19 +1,50 @@
 import React, { useState } from "react";
+import axios from "axios";
+import LocalStorageHelper from "../helpers/localstorage-helper";
 
 const Login = () => {
     const [formData, setFormData] = useState({
-        email: "",
+        emailOrCnpj: "",
         password: "",
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const { emailOrCnpj, password } = formData;
+
+            if (!emailOrCnpj || !password) {
+                throw new Error("Email/CNPJ and password are required");
+            }
+
+            let payload = { password };
+            if (emailOrCnpj.includes("@")) {
+                payload.email = emailOrCnpj;
+            } else {
+                payload.cnpj = emailOrCnpj;
+            }
+
+            const response = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/users/login`,
+                payload
+            );
+
+            const { token } = response.data;
+            console.log("Token", token);
+            LocalStorageHelper.setToken(token);
+
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Login error", error.message);
+        }
     };
 
     return (
@@ -23,13 +54,15 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-gray-700">Email</label>
+                            <label className="block text-gray-700">
+                                Email or CNPJ
+                            </label>
                             <input
                                 type="text"
                                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                                placeholder="Digite seu email"
-                                name="email"
-                                value={formData.email}
+                                placeholder="Digite seu email ou CNPJ"
+                                name="emailOrCnpj"
+                                value={formData.emailOrCnpj}
                                 onChange={handleChange}
                             />
                         </div>
