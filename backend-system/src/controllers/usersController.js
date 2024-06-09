@@ -30,9 +30,13 @@ const loginUserController = async (req, res) => {
         return;
     }
     try {
-        const { email, password } = req.body;
-        const user = await loginUser({ email, password });
+        const { email, cnpj, password } = req.body;
 
+        if (!password || (!email && !cnpj)) {
+            throw new Error("Email or CNPJ and password are required");
+        }
+
+        const user = await loginUser({ email, cnpj, password });
         const token = generateToken(user);
 
         res.status(200).json({ token, message: "Login successful" });
@@ -48,7 +52,6 @@ const listMyUserController = async (req, res) => {
         const user = await prisma.user.findUnique({
             where: { id: loggedUserId },
             select: {
-                name: true,
                 email: true,
             },
         });
