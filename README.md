@@ -1,4 +1,4 @@
-# SpeedMeal App
+# System Financial App
 
 This is a FullStack Project focusing on a Financial System to organizate and generate NFe and billet.
 
